@@ -113,14 +113,14 @@ contract Staking is Initializable, StakingInterface, Exponential {
         require(newLimitAmount > 0);
         require(newInterestRate > 0);
         stakingMetaData.lockupTerm = newLockupTerm;
-        stakingMetaData.interestLimitAmount = newLimitAmount;
+        stakingMetaData.totalInterestLimitAmount = newLimitAmount;
         stakingMetaData.interestRate = newInterestRate;
 
         emit UpdateStakingStandard(newLockupTerm, newLimitAmount, newInterestRate);
     }
 
 
-    // return (totalPaidInterestAmount + (totalPrincipalAmount * interestRate)) / interestLimitAmount
+    // return (totalPaidInterestAmount + (totalPrincipalAmount * interestRate)) / totalInterestLimitAmount
     function currentUsedRateOfInterestLimit() external view returns (uint) {
         return div_(mul_(add_(stakingMetaData.totalPaidInterestAmount, _expectedInterest(stakingMetaData.totalPrincipalAmount)), 10 ** 18), stakingMetaData.totalInterestLimitAmount);
     }
