@@ -159,6 +159,9 @@ contract Staking is Initializable, StakingInterface, Exponential {
 
     function _deleteStakingProductFrom(address account, uint registeredTimestamp) internal {
         uint len = allStakingProductsTimestampOf[account].length;
+
+        require(len > 0);
+
         uint idx = len;
 
         for (uint i = 0; i < len; i += 1) {
@@ -169,6 +172,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         }
         // handle invalid idx value
         require(idx < len);
+
         allStakingProductsTimestampOf[account][idx] = allStakingProductsTimestampOf[account][len - 1];
         delete allStakingProductsTimestampOf[account][len - 1];
         allStakingProductsTimestampOf[account].length--;
