@@ -109,6 +109,9 @@ contract Staking is Initializable, StakingInterface, Exponential {
     function updateStakingStandard(uint newLockupTerm, uint newLimitAmount, uint newInterestRate) external {
         require(admin == msg.sender, "E1");
 
+        require(newLockupTerm > 0);
+        require(newLimitAmount > 0);
+        require(newInterestRate > 0);
         stakingMetaData.lockupTerm = newLockupTerm;
         stakingMetaData.interestLimitAmount = newLimitAmount;
         stakingMetaData.interestRate = newInterestRate;
