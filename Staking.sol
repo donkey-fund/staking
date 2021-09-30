@@ -18,6 +18,9 @@ import "../common/upgradeable/Initializable.sol";
 
 contract Staking is Initializable, StakingInterface, Exponential {
     function initialize(address donkeyAddress_, uint lockupTerm_, uint totalInterestLimitAmount_, uint interestRate_, Controller controller_) public initializer {
+
+        require(controller_.isController());
+
         admin = msg.sender;
         donkeyAddress = donkeyAddress_;
         controller = controller_;
