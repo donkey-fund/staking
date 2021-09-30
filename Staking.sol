@@ -54,7 +54,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         vars.donkeyBalance = donkey.balanceOf(vars.account);
 
         if (mintAmount > vars.donkeyBalance) {
-            // refers to https://github.com/donkey-fund/staking/blob/main/readme.md/#Notice
+            // reference : https://github.com/donkey-fund/staking/blob/main/readme.md/#Notice
             vars.claimResult = controller.claimDonkeyBehalfOf(vars.account);
             require(vars.claimResult, "E105");
             require(mintAmount <= currentTotalDonBalanceOf(vars.account), "E104");
@@ -181,7 +181,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         return mul_ScalarTruncateAddUInt(Exp({ mantissa: stakingMetaData.interestRate }), amount, amount);
     }
 
-    // This code is referenced from Compound: https://github.com/compound-finance/compound-protocol/blob/master/contracts/CErc20.sol
+    // reference : https://github.com/compound-finance/compound-protocol/blob/master/contracts/CErc20.sol
     function _doTransferIn(address sender, uint amount) internal returns (uint) {
         IERC20 token = IERC20(donkeyAddress);
 
@@ -210,7 +210,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         return balanceAfterTransfer - balanceBeforeTransfer;
     }
 
-    // This code is referenced from Compound: https://github.com/compound-finance/compound-protocol/blob/master/contracts/CErc20.sol
+    // reference : https://github.com/compound-finance/compound-protocol/blob/master/contracts/CErc20.sol
     function _doTransferOut(address payable recipient, uint amount) internal returns (uint) {
         IERC20 token = IERC20(donkeyAddress);
         token.transfer(recipient, amount);
@@ -233,7 +233,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         return amount;
     }
 
-    // This code is referenced from Compound: https://github.com/compound-finance/compound-protocol/blob/master/contracts/CToken.sol
+    // reference : https://github.com/compound-finance/compound-protocol/blob/master/contracts/CToken.sol
     modifier nonReentrant() {
         require(_notEntered, "E67");
         _notEntered = false;
