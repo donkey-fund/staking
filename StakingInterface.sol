@@ -17,7 +17,7 @@ contract StakingStorage {
         // no-scale
         uint lockupTerm;
         // 1e18 scale 
-        uint interestLimitAmount;
+        uint totalInterestLimitAmount;
         // 1e18 scale 
         // ex) 30% : 0.3 * 1e18
         uint interestRate;

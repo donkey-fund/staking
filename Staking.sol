@@ -17,13 +17,13 @@ import "../common/upgradeable/Initializable.sol";
  */
 
 contract Staking is Initializable, StakingInterface, Exponential {
-    function initialize(address donkeyAddress_, uint lockupTerm_, uint interestLimitAmount_, uint interestRate_, Controller controller_) public initializer {
+    function initialize(address donkeyAddress_, uint lockupTerm_, uint totalInterestLimitAmount_, uint interestRate_, Controller controller_) public initializer {
         admin = msg.sender;
         donkeyAddress = donkeyAddress_;
         controller = controller_;
         
         stakingMetaData.lockupTerm = lockupTerm_;
-        stakingMetaData.interestLimitAmount = interestLimitAmount_;
+        stakingMetaData.totalInterestLimitAmount = totalInterestLimitAmount_;
         stakingMetaData.interestRate = interestRate_;
 
         _notEntered = true;
@@ -48,7 +48,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
 
         // totalExpectedInterest = (totalPrincipalAmount + mintAmount) * interestRate + totalPaidInterestAmount
         vars.totalExpectedInterest = add_(_expectedInterest(add_(stakingMetaData.totalPrincipalAmount, mintAmount)), stakingMetaData.totalPaidInterestAmount);
-        require(vars.totalExpectedInterest <= stakingMetaData.interestLimitAmount, "E103");
+        require(vars.totalExpectedInterest <= stakingMetaData.totalInterestLimitAmount, "E103");
 
         IERC20 donkey = IERC20(donkeyAddress);
         vars.donkeyBalance = donkey.balanceOf(vars.account);
@@ -78,7 +78,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         require(stakingProductOf[account][registeredTimestamp].releaseTime <= block.timestamp, "E107");
 
         uint totalPaidInterestAmountNew = add_(stakingMetaData.totalPaidInterestAmount, _expectedInterest(stakingProductOf[account][registeredTimestamp].principal));
-        require(totalPaidInterestAmountNew <= stakingMetaData.interestLimitAmount, "E108");
+        require(totalPaidInterestAmountNew <= stakingMetaData.totalInterestLimitAmount, "E108");
 
         uint actualRedeemAmount = _doTransferOut(account, _expectedPrincipalAndInterest(stakingProductOf[account][registeredTimestamp].principal));
         stakingMetaData.totalPrincipalAmount = sub_(stakingMetaData.totalPrincipalAmount, stakingProductOf[account][registeredTimestamp].principal);
@@ -119,7 +119,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
 
     // return (totalPaidInterestAmount + (totalPrincipalAmount * interestRate)) / interestLimitAmount
     function currentUsedRateOfInterestLimit() external view returns (uint) {
-        return div_(mul_(add_(stakingMetaData.totalPaidInterestAmount, _expectedInterest(stakingMetaData.totalPrincipalAmount)), 10 ** 18), stakingMetaData.interestLimitAmount);
+        return div_(mul_(add_(stakingMetaData.totalPaidInterestAmount, _expectedInterest(stakingMetaData.totalPrincipalAmount)), 10 ** 18), stakingMetaData.totalInterestLimitAmount);
     }
 
     function stakingProductsOf(address account) external view returns (StakingProductView[] memory) {
