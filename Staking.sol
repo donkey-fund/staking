@@ -29,6 +29,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
         stakingMetaData.totalInterestLimitAmount = totalInterestLimitAmount_;
         stakingMetaData.interestRate = interestRate_;
 
+
         _notEntered = true;
     }
 
@@ -90,8 +91,8 @@ contract Staking is Initializable, StakingInterface, Exponential {
         vars.totalExpectedInterest = add_(_expectedInterest(add_(stakingMetaData.totalPrincipalAmount, mintAmount)), stakingMetaData.totalPaidInterestAmount);
         require(vars.totalExpectedInterest <= stakingMetaData.totalInterestLimitAmount, "E103");
 
-        IERC20 donkey = IERC20(donkeyAddress);
-        vars.donkeyBalance = donkey.balanceOf(vars.account);
+        // IERC20 donkey = IERC20(donkeyAddress);
+        // vars.donkeyBalance = donkey.balanceOf(vars.account);
 
         vars.actualMintAmount = _doTransferIn(vars.account, mintAmount);
         // totalPrincipalAmount = totalPrincipalAmount + actualMintAmount
@@ -126,6 +127,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
 
     // redeem principal ONLY before lockupTerm
     function redeemPrincipal(uint registeredTimestamp) external nonReentrant returns (uint) {
+        require(block.number >= 13329882);
         address payable account = msg.sender;
         require(stakingProductOf[account][registeredTimestamp].principal > 0, "E106");
         uint actualRedeemAmount = _doTransferOut(account, stakingProductOf[account][registeredTimestamp].principal);
