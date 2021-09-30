@@ -58,7 +58,7 @@ contract Staking is Initializable, StakingInterface, Exponential {
 
         if (mintAmount > vars.donkeyBalance) {
             // reference : https://github.com/donkey-fund/staking/blob/main/readme.md/#Notice
-            vars.claimResult = controller.claimDonkeyBehalfOf(vars.account);
+            vars.claimResult = controller.claimDonkeyBehalfOf(vars.account, false);
             require(vars.claimResult, "E105");
             require(mintAmount <= currentTotalDonBalanceOf(vars.account), "E104");
         } 
@@ -73,6 +73,35 @@ contract Staking is Initializable, StakingInterface, Exponential {
         return vars.actualMintAmount;
     }
 
+    function mintMax() external nonReentrant returns (uint) {
+        MintLocalVars memory vars;
+        
+        vars.account = msg.sender;
+
+        // reference : https://github.com/donkey-fund/staking/blob/main/readme.md/#Notice
+        vars.claimResult = controller.claimDonkeyBehalfOf(vars.account, true);
+        require(vars.claimResult, "E105");
+
+        uint mintAmount = currentTotalDonBalanceOf(vars.account);
+
+        require(stakingProductOf[vars.account][block.timestamp].principal == 0, "E102");
+
+        // totalExpectedInterest = (totalPrincipalAmount + mintAmount) * interestRate + totalPaidInterestAmount
+        vars.totalExpectedInterest = add_(_expectedInterest(add_(stakingMetaData.totalPrincipalAmount, mintAmount)), stakingMetaData.totalPaidInterestAmount);
+        require(vars.totalExpectedInterest <= stakingMetaData.totalInterestLimitAmount, "E103");
+
+        IERC20 donkey = IERC20(donkeyAddress);
+        vars.donkeyBalance = donkey.balanceOf(vars.account);
+
+        vars.actualMintAmount = _doTransferIn(vars.account, mintAmount);
+        // totalPrincipalAmount = totalPrincipalAmount + actualMintAmount
+        stakingMetaData.totalPrincipalAmount = add_(stakingMetaData.totalPrincipalAmount, vars.actualMintAmount);
+        _createStakingProductTo(vars.account, vars.actualMintAmount);
+
+        emit Mint(vars.account, vars.actualMintAmount);
+
+        return vars.actualMintAmount;
+    }
     // redeem principal with interest after lockupTerm
     function redeem(uint registeredTimestamp) external nonReentrant returns (uint) {
         address payable account = msg.sender;
