@@ -24,32 +24,32 @@ ex) approve(Staking Contract address, 1000)
 ```
 
 
-`0x474B5CfBeDC79aAc658691d35D7513D38527f2DA`
+`0x3fF3C4690dA9718c55299e2dC77aFBc4ABcEBB88`
 - lockupTerm : 3 minutes
 - interestLimitAmount : 3000
 - interestRate : 30%
 
-`0xAB79636EFeF786D72fd73193Cdbd41Fa760Fa620`
+`0x32379e1dDe44290d06F243cC9911B4893E2eBA22`
 - lockupTerm : 6 minutes
 - interestLimitAmount : 6000
 - interestRate : 50%
 
-`0x4F7EB0Bd6f79072C81acF64BedD0eb36604b6661`
+`0x507D94e8B9f8Db73166F8aaE7764C5B9cF0B4d6b`
 - lockupTerm : 12 minutes
 - interestLimitAmount : 12000
 - interestRate : 100%
 
-`0x8ab1c1624BdfCCD0bdD23dE910697c6381Ac7efA`
+`0x87be2F22e0796123F9828EDED11Bd1Dc796e39e5`
 - lockupTerm : 24 minutes
 - interestLimitAmount : 24000
 - interestRate : 200%
 
-`0x2424fdC89840446F1ad0c3276eCEBB78Dd0D5C98`
+`0x1D1130a8fBF98d97733b37D92FD9D84CA1E909Db`
 - lockupTerm : 36 minutes
 - interestLimitAmount : 36000
 - interestRate : 300%
 
-`0x0D52d40Ffa1d9B7e38c71a81E0CB367fDfa58F5f`
+`0xEdf0435407a06bFfCed997F9F2703eE813e6614A`
 - lockupTerm : 60 minutes
 - interestLimitAmount : 60000
 - interestRate : 500%
