@@ -53,6 +53,7 @@ contract StakingInterface is StakingStorage {
     event RedeemPrincipal(address redeemer, uint redeemAmount);
     event UpdateStakingStandard(uint newLockupTerm, uint newLimitAmount, uint newInterestRate);
     event UpdateController(Controller oldController, Controller newController);
+    event UpdateAdmin(address oldAdmin, address newAdmin);
 
     function mint(uint mintAmount) external returns (uint);
 

@@ -156,6 +156,14 @@ contract Staking is Initializable, StakingInterface, Exponential {
         emit UpdateController(oldController, newController);
     }
 
+    function setAdmin(address newAdmin) external {
+        require(admin == msg.sender, "E1");
+        address oldAdmin = admin;
+        admin = newAdmin;
+
+        emit UpdateAdmin(oldAdmin, newAdmin);
+    }
+
     function currentTotalDonBalanceOf(address account) public view returns (uint) {
         IERC20 donkey = IERC20(donkeyAddress);
         return add_(donkey.balanceOf(account), controller.donkeyAccrued(account));
