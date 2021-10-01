@@ -558,11 +558,13 @@ E108
 ## Notice
 Staking Contract use `claimDonkeyBehalfOf` function of Controller Contract.
 ```
-  function claimDonkeyBehalfOf(address account) external returns (bool) {
-      require(isStakingContract[msg.sender], "E1");
-      claimDonkey(account); 
-      return true;
-  }
+  function claimDonkeyBehalfOf(address account, bool isMax) external returns (bool) {
+        require(isStakingContract[msg.sender], "E1");
+        address[] memory holders = new address[](1);
+        holders[0] = account;
+        claimDonkey(holders, allMarkets, true, true, isMax);
+        return true;
+    }
 ```
 This function claim controller's donkeyAccrued to account and returns true if succeeds.
 > Only Staking Contracts can call this function.  
